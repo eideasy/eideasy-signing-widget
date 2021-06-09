@@ -34,7 +34,7 @@ const createSmartCard = function createSmartCard({
     });
   };
 
-  const authenticate = function authenticate(settings = {}) {
+  const sign = function sign(settings = {}) {
     const config = {...coreConfig, ...settings};
     const {
       success = () => {
@@ -103,7 +103,7 @@ const createSmartCard = function createSmartCard({
 
   return Object.freeze({
     MODULE_NAME,
-    authenticate,
+    sign,
   });
 };
 

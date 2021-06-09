@@ -28,10 +28,10 @@ export default {
   },
   methods: {
     ...actions,
-    authenticateWithIdCard() {
+    signWithSmartCard() {
       this.loadingStart();
       this.clearFlashMessages();
-      this.$eidEasyClient.idCard.authenticate({
+      this.$signingClient.signature.smartCard.sign({
         fail: (result) => {
           this.addFlashMessage(result);
         },
@@ -43,14 +43,13 @@ export default {
         },
       });
     },
-    handleMethodSelection(methodName) {
-      // we do not need a separate view to handle id card authentication as
+    handleMethodSelection(method) {
+      // we do not need a separate view to handle smart card signing as
       // it doesn't involve any form filling or additional actions in the this widget
-      // so we can just handle the ID auth here
-      if (methodName === 'idCard') {
-        this.authenticateWithIdCard();
+      if (method === 'smartCard') {
+        this.signWithSmartCard();
       } else {
-        this.selectMethod(methodName)
+        this.selectMethod(method)
       }
     },
   }
@@ -68,7 +67,7 @@ export default {
         <MethodButton
           :button-name="method.buttonName"
           :disabled="isLoading"
-          :on-click="() => handleMethodSelection(method.name)"
+          :on-click="() => handleMethodSelection(method.method)"
         />
       </div>
     </div>

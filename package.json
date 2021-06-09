@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@eid-easy/eideasy-js-sdk": "^0.13.0",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "i18n-iso-countries": "^6.7.0",
+    "lodash": "^4.17.21",
     "lodash.defaultsdeep": "^4.6.1",
     "vue": "^2.6.11",
     "vue-custom-element": "^3.2.14",
