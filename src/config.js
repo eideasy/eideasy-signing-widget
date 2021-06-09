@@ -11,35 +11,30 @@ export const allMethods = Object.freeze({
   smartId: {
     name: 'smartId',
     viewName: viewNames.SmartIdAuth,
-    buttonName: methodButtonNames.IdCardButton,
+    buttonName: methodButtonNames.SmartIdButton,
   },
   idCard: {
     name: 'idCard',
     buttonName: methodButtonNames.IdCardButtonEE,
   },
+  smartCard: {
+    name: 'smartCard',
+    buttonName: methodButtonNames.IdCardButton,
+  }
 })
-
-export const enabledMethodsByCountry = {
-  EE: [
-    allMethods.mobileId,
-    allMethods.smartId,
-    allMethods.idCard,
-  ],
-  LV: [
-    allMethods.mobileId,
-    allMethods.smartId,
-    allMethods.idCard,
-  ],
-  LT: [
-    allMethods.mobileId,
-    allMethods.smartId,
-    allMethods.idCard,
-  ]
-}
 
 export const enabledMethods = [
   {
+    ...allMethods.smartCard,
+    blacklist: ['EE'],
+  },
+  {
     ...allMethods.idCard,
+    whitelist: ['EE'],
+  },
+  {
+    ...allMethods.smartId,
+    whitelist: ['EE'],
   }
 ]
 

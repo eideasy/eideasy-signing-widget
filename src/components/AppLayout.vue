@@ -66,7 +66,6 @@ export default {
     background-color: $gray-100;
     border-radius: $border-radius;
     border: 1px solid $border-color;
-    overflow: hidden;
   }
 
   .main {

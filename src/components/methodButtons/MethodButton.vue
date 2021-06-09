@@ -50,6 +50,7 @@ export default {
   height: 43px;
   user-select: none;
   background-color: $white;
+  min-width: 168px;
 
   &:hover,
   &:focus {

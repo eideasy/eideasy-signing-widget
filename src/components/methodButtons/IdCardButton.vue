@@ -2,7 +2,7 @@
 import MethodButtonBase from './MethodButtonBase';
 import AppIcon from '../../icons/AppIcon';
 export default {
-  name: 'IdCardButtonEE',
+  name: 'IdCardButton',
   components: {
     MethodButtonBase,
     AppIcon,

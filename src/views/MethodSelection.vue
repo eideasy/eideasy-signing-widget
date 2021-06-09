@@ -1,6 +1,6 @@
 <script>
 import {actions, getters} from '../store';
-import {enabledMethodsByCountry} from '../config';
+import {enabledMethods} from '../config';
 import MethodButton from '../components/methodButtons/MethodButton';
 
 export default {
@@ -8,15 +8,22 @@ export default {
   components: {
     MethodButton,
   },
-  data() {
-    return {
-      enabledMethodsByCountry,
-    }
-  },
   computed: {
     ...getters,
     authMethods() {
-      return enabledMethodsByCountry[this.countryCode];
+      return enabledMethods.filter(method => {
+        const {countryCode} = this;
+        const whitelist = method.whitelist || [];
+        const blacklist = method.blacklist || [];
+        let enabled = true;
+        if (whitelist.length && !whitelist.includes(countryCode)) {
+          enabled = false;
+        }
+        if (blacklist.length && blacklist.includes(countryCode)) {
+          enabled = false;
+        }
+        return enabled;
+      });
     },
   },
   methods: {
@@ -56,7 +63,7 @@ export default {
       <div
         v-for="method in authMethods"
         :key="method.name"
-        :class="$style.unit"
+        :class="[$style.unit, {[$style.unit6]: authMethods.length > 1}]"
       >
         <MethodButton
           :button-name="method.buttonName"
@@ -72,13 +79,12 @@ export default {
 .row {
   display: flex;
   justify-content: center;
-  margin-left: -$spacer-3;
-  margin-right: -$spacer-3;
   flex-wrap: wrap;
 }
 
 .unit {
-  width: 100%;
-  padding: $spacer-2 $spacer-6;
+  padding: $spacer-2 $spacer-2;
+  flex-grow: 1;
 }
+
 </style>
