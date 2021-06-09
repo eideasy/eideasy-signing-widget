@@ -1,4 +1,4 @@
-# eideasy-widget
+# eideasy-signing-widget
 
 # Important !!
 This package is in active development and not production ready.
