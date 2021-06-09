@@ -1,0 +1,29 @@
+{
+  "smartId": "Smart-ID",
+  "mobileId": "Mobile-ID",
+  "idCard": "ID-card",
+  "mobileIdViewTitle": "Mobile-ID",
+  "smartIdViewTitle": "Smart-ID",
+  "poweredByEidEasy": "Powered by eIDEasy",
+  "personalIdCode": "Персональный код",
+  "logIn": "Войти",
+  "phoneNumber": "Номер телефона",
+  "thisFieldIsRequired": "This field is required",
+  "yourVerificationCode": "Your verification code:",
+  "cancel": "Cancel",
+  "noResponseError": "Something went wrong. Make sure you're connected to the Internet, then try again.",
+  "yourRegion": "Your Region",
+  "back": "Back",
+  "noMatchingCountries": "No matching countries",
+  "countries": {
+    "EE": {
+      "name": "Эстония"
+    },
+    "LV": {
+      "name": "Латвия"
+    },
+    "LT": {
+      "name": "Литва"
+    }
+  }
+}

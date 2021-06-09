@@ -1,0 +1,29 @@
+{
+  "smartId": "Smart-ID",
+  "mobileId": "Mobile-ID",
+  "mobileIdViewTitle": "Mobile-ID",
+  "smartIdViewTitle": "Smart-ID",
+  "idCard": "ID-card",
+  "poweredByEidEasy": "Powered by eIDEasy",
+  "personalIdCode": "Personal identity code",
+  "logIn": "Log In",
+  "phoneNumber": "Phone number",
+  "thisFieldIsRequired": "This field is required",
+  "yourVerificationCode": "Your verification code:",
+  "cancel": "Cancel",
+  "noResponseError": "Something went wrong. Make sure you're connected to the Internet, then try again.",
+  "yourRegion": "Your Country",
+  "back": "Back",
+  "noMatchingCountries": "No matching countries",
+  "countries": {
+    "EE": {
+      "name": "Estonia"
+    },
+    "LV": {
+      "name": "Latvia"
+    },
+    "LT": {
+      "name": "Lithuania"
+    }
+  }
+}

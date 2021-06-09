@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <style>
+        .container {
+            max-width: 768px;
+            margin: 0 auto;
+        }
+
+        .widgetHolder {
+            max-width: 490px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+<noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+</noscript>
+
+
+<div class="container">
+    <div style="margin-top: 10px; margin-bottom: 10px;">
+        <label for="langPicker">Language:</label>
+        <select name="langPicker" id="langPicker">
+            <option value="en">en</option>
+            <option value="et" selected>et</option>
+            <option value="lv">lv</option>
+            <option value="lt">lt</option>
+            <option value="ru">ru</option>
+        </select>
+    </div>
+    <div id="widgetHolder" class="widgetHolder"></div>
+</div>
+
+<script>
+  const widgetHolder = document.getElementById('widgetHolder');
+  const eidEasyWidget = document.createElement('eideasy-widget');
+
+  var settings = {
+    countryCode: 'EE', // ISO 3166  two letter country code
+    language: 'et', // ISO 639-1 two letter language code,
+    sandbox: true,
+    clientId: '2IaeiZXbcKzlP1KvjZH9ghty2IJKM8Lg',
+    localApiEndpoints: {
+      identityStart: 'http://eid-sample-app.test/api/identity/start',
+      identityFinish: 'http://eid-sample-app.test/api/identity/finish',
+    },
+    translations: {
+      'et': {
+        "message": "Mina olen antud kasutaja poolt i18n !!",
+      },
+      'en': {
+        message: "I am provided in settings",
+      }
+    }, // translations object to override existing translations or provide completely new translations
+    onSuccess: function (data) {
+      console.log('!!!!!! success !!!!!!!');
+      console.log(data);
+    },
+  }
+
+  Object.keys(settings).forEach(key => {
+    eidEasyWidget[key] = settings[key];
+  });
+
+  widgetHolder.appendChild(eidEasyWidget);
+
+  document
+    .getElementById('langPicker')
+    .addEventListener('change', (e) => {
+      eidEasyWidget.language = e.target.value;
+    });
+</script>
+<!-- built files will be auto injected -->
+</body>
+</html>

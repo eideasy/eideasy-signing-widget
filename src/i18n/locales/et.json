@@ -1,0 +1,29 @@
+{
+  "smartId": "Smart-ID",
+  "mobileId": "Mobiil-ID",
+  "idCard": "ID-kaart",
+  "mobileIdViewTitle": "Mobiil-ID",
+  "smartIdViewTitle": "Smart-ID",
+  "poweredByEidEasy": "Powered by eIDEasy",
+  "personalIdCode": "Isikukood",
+  "logIn": "Logi sisse",
+  "phoneNumber": "Mobiili number",
+  "thisFieldIsRequired": "See on kohustuslik väli",
+  "yourVerificationCode": "Kontrollkood:",
+  "cancel": "Tühista",
+  "noResponseError": "Toiming ebaõnnestus. Palun kontrolli kas internetiühendus on olemas, sulge kõik brauseriaknad ja proovi seejärel uuesti",
+  "yourRegion": "Riik",
+  "back": "Tagasi",
+  "noMatchingCountries": "Sobivat riiki ei leitud",
+  "countries": {
+    "EE": {
+      "name": "Eesti"
+    },
+    "LV": {
+      "name": "Läti"
+    },
+    "LT": {
+      "name": "Leedu"
+    }
+  }
+}
