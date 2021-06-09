@@ -14,16 +14,5 @@
   "noResponseError": "Toiming ebaõnnestus. Palun kontrolli kas internetiühendus on olemas, sulge kõik brauseriaknad ja proovi seejärel uuesti",
   "yourRegion": "Riik",
   "back": "Tagasi",
-  "noMatchingCountries": "Sobivat riiki ei leitud",
-  "countries": {
-    "EE": {
-      "name": "Eesti"
-    },
-    "LV": {
-      "name": "Läti"
-    },
-    "LT": {
-      "name": "Leedu"
-    }
-  }
+  "noMatchingCountries": "Sobivat riiki ei leitud"
 }

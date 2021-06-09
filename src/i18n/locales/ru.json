@@ -14,16 +14,5 @@
   "noResponseError": "Something went wrong. Make sure you're connected to the Internet, then try again.",
   "yourRegion": "Your Region",
   "back": "Back",
-  "noMatchingCountries": "No matching countries",
-  "countries": {
-    "EE": {
-      "name": "Эстония"
-    },
-    "LV": {
-      "name": "Латвия"
-    },
-    "LT": {
-      "name": "Литва"
-    }
-  }
+  "noMatchingCountries": "No matching countries"
 }

@@ -1,5 +1,6 @@
 import viewNames from './views/viewNames';
 import methodButtonNames from './components/methodButtons/methodButtonNames';
+import countries from './i18n/countries';
 
 export const allMethods = Object.freeze({
   mobileId: {
@@ -36,4 +37,10 @@ export const enabledMethodsByCountry = {
   ]
 }
 
-export const availableCountries = Object.keys(enabledMethodsByCountry);
+export const enabledMethods = [
+  {
+    ...allMethods.idCard,
+  }
+]
+
+export const availableCountries = Object.keys(countries.getNames("en", {select: "official"}));

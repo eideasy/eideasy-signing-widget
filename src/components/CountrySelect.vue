@@ -2,6 +2,7 @@
 import CountrySelectOption from './CountrySelectOption';
 import {actions, getters} from '../store';
 import {availableCountries} from '../config';
+import countries from '../i18n/countries';
 
 export default {
   name: 'CountrySelect',
@@ -18,14 +19,13 @@ export default {
     value() {
       const {countryCode} = this;
       return {
-        label: this.$t(`countries.${countryCode}.name`),
+        label: countries.getName(countryCode, this.$i18n.locale, {select: "official"}),
         countryCode,
       }
     },
     options() {
-      const $t = this.$t.bind(this);
       return this.availableCountries.map((countryCode) => ({
-        label: $t(`countries.${countryCode}.name`),
+        label: countries.getName(countryCode, this.$i18n.locale, {select: "official"}),
         countryCode,
       }))
     }
