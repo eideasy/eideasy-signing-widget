@@ -3,35 +3,32 @@ import createResultStore, {actionTypes} from './createResultStore';
 const MODULE_NAME = 'smartCard';
 const createSmartCard = function createSmartCard({
   coreContext,
-  apiClient,
 }) {
   const {i18n, config: coreConfig} = coreContext;
 
-  const step1 = function step1(settings = {}) {
-    let url = `${settings.apiEndpoints.card(settings.countryCode)}/api/identity/${settings.clientId}/read-card`;
-    if (settings.nonce) {
-      url += `?nonce=${settings.nonce}`;
-    }
-    return apiClient.get({url, cancelToken: settings.cancelToken});
+  const step1 = async function step1(settings = {}) {
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('src', 'https://id.eideasy.com/signatures/integration/id-card?country=' + settings.countryCode);
+    iframe.style.width = '200px';
+    iframe.style.height = '100px';
+    settings.iframeHolder.innerHTML = '';
+    settings.iframeHolder.appendChild(iframe);
+    iframe.postMessage({
+      operation: 'getSignature',
+      hexDigest: 'hexDigest received from start-signing API call'
+    }, 'https://id.eideasy.com');
+    window.addEventListener('message', async (e) => {
+      console.log(e);
+      if (e.data.operation === "getSignature") {
+        // use e.data.signature_value
+        // Continue to the finalizing the document, adding timestamp and OCSP responses
+        // {{url}}/api/signatures/{{method}}/complete
+      }
+    }, false);
   };
 
-  const step2 = function step2(settings = {}) {
-    const method = {
-      EE: 'ee-id-login',
-      LV: 'lv-id-login',
-      LT: 'lt-id-login',
-    };
+  const step2 = function step2() {
 
-    return apiClient.post({
-      url: settings.localApiEndpoints.identityFinish,
-      data: {
-        token: settings.data.token,
-        country: settings.countryCode,
-        method: method[settings.countryCode],
-        lang: settings.language,
-      },
-      cancelToken: settings.cancelToken,
-    });
   };
 
   const sign = function sign(settings = {}) {
@@ -47,9 +44,6 @@ const createSmartCard = function createSmartCard({
 
     const language = settings.language || i18n.getCurrentLanguage();
 
-    const source = apiClient.CancelToken.source();
-    const cancelToken = source.token;
-
     async function execute() {
       let step1Result;
       const {getState, dispatch} = createResultStore();
@@ -57,7 +51,6 @@ const createSmartCard = function createSmartCard({
         step1Result = await step1({
           ...config,
           language,
-          cancelToken,
         });
       } catch (error) {
         dispatch(actionTypes.addResult, {error});
@@ -71,7 +64,6 @@ const createSmartCard = function createSmartCard({
         try {
           step2Result = await step2({
             ...config,
-            cancelToken,
             language,
             data: step1Result.data,
           });
@@ -95,9 +87,7 @@ const createSmartCard = function createSmartCard({
     execute().catch(console.error);
 
     return Object.freeze({
-      cancel: function cancel() {
-        source.cancel();
-      },
+      cancel: function cancel() {},
     });
   };
 

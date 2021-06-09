@@ -32,6 +32,7 @@ export default {
       this.loadingStart();
       this.clearFlashMessages();
       this.$signingClient.signature.smartCard.sign({
+        iframeHolder: this.$refs.iframeHolder,
         fail: (result) => {
           this.addFlashMessage(result);
         },
@@ -71,6 +72,7 @@ export default {
         />
       </div>
     </div>
+    <div ref="iframeHolder" />
   </div>
 </template>
 

@@ -36,10 +36,12 @@ export const enabledMethods = [
     ...allMethods.idCardEE,
     whitelist: ['EE'],
   },
+  /*
   {
     ...allMethods.smartId,
     whitelist: ['EE'],
   }
+   */
 ]
 
 export const availableCountries = Object.keys(countries.getNames("en", {select: "official"}));
