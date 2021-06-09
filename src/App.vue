@@ -40,14 +40,14 @@ export default {
   watch: {
     countryCodeFromStore: {
       handler(newVal) {
-        this.$eidEasyClient.setCountryCode(newVal);
+        this.$signingClient.setCountryCode(newVal);
       },
       immediate: true,
     },
     language: {
       handler(newVal) {
         this.$i18n.locale = newVal;
-        this.$eidEasyClient.setLanguage(newVal);
+        this.$signingClient.setLanguage(newVal);
       },
       immediate: true,
     },

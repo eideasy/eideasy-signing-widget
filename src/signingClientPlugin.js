@@ -1,10 +1,10 @@
-import createClient from '@eid-easy/eideasy-js-sdk';
+import createSigningClient from './signingClient/createSigningClient';
 
 // define a Vue plugin
 // https://vuejs.org/v2/guide/plugins.html
-const eidEasyClient = {
+const signingClientPlugin = {
   install(Vue, options) {
-    Vue.prototype.$eidEasyClient = createClient(options);
+    Vue.prototype.$signingClient = createSigningClient(options);
     Vue.prototype.$eidEasyOnSuccess = (result) => {
       if (options.onSuccess && typeof options.onSuccess === 'function') {
         options.onSuccess(result);
@@ -13,4 +13,4 @@ const eidEasyClient = {
   }
 }
 
-export default eidEasyClient;
+export default signingClientPlugin;
