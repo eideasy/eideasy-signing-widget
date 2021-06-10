@@ -1,5 +1,12 @@
 <script>
-import staticAsset from '../staticAsset';
+function importAll(r) {
+  let images = {};
+  r.keys().map((item) => { images[item.replace('./', '')] = r(item); });
+  return images;
+}
+
+const images = importAll(require.context('../assets/country-flag-icons/3x2', false, /\.(png|jpe?g|svg)$/));
+
 export default {
   name: 'CountrySelectOption',
   props: {
@@ -9,8 +16,8 @@ export default {
     },
   },
   computed: {
-    imageSrc() {
-      return staticAsset(`country-flag-icons/3x2/${this.option.countryCode}.svg`);
+    dynamicIcon() {
+      return images[`${this.option.countryCode}.svg`]
     }
   },
 }
@@ -18,11 +25,7 @@ export default {
 
 <template>
   <div :class="$style.option">
-    <img
-      :src="imageSrc"
-      :alt="option.label"
-      :class="$style.flag"
-    >
+    <component :is="dynamicIcon" />
     <div :class="$style.optionText">
       {{ option.label }}
     </div>
@@ -45,7 +48,7 @@ export default {
   text-overflow: ellipsis;
 }
 
-.flag {
+.option svg {
   display: block;
   width: 26px;
   height: auto;
