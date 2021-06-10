@@ -1,9 +1,11 @@
 <script>
 import MethodButtonBase from './MethodButtonBase';
+import IconIdCardEE from '../../assets/svg/id-kaart.svg';
 export default {
   name: 'IdCardButtonEE',
   components: {
     MethodButtonBase,
+    IconIdCardEE,
   },
 }
 </script>
@@ -11,18 +13,14 @@ export default {
 <template>
   <MethodButtonBase>
     <template v-slot:slot1>
-      <img
-        src="../../assets/svg/id-kaart.svg"
-        alt="Estonian ID card logo"
-        :class="$style.image"
-      >
+      <IconIdCardEE :class="$style.icon" />
     </template>
   </MethodButtonBase>
 </template>
 
 
 <style lang="scss" module>
-.image {
+.icon {
   display: block;
   width: 110px;
   height: auto;

@@ -14,7 +14,13 @@ module.exports = {
     // add replacement loader(s)
     svgRule
       .use('vue-svg-loader')
-      .loader('vue-svg-loader');
+      .loader('vue-svg-loader')
+      .tap(() => ({
+        svgo: {
+          // for scalable svg's
+          plugins: [{ removeDimensions: true }, { removeViewBox: false }]
+        }
+      }));
 
     config.module
       .rule('images')

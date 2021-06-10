@@ -29,6 +29,7 @@ export default {
     viewBox="0 0 41 41"
     :aria-labelledby="iconName"
     role="presentation"
+    :class="$style.svg"
   >
     <title
       :id="iconName"
@@ -40,3 +41,9 @@ export default {
   </svg>
 </template>
 
+<style lang="scss" module>
+  .svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+</style>
