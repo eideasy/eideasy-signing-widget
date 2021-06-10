@@ -33,6 +33,10 @@ export default {
       type: Object,
       required: true,
     },
+    idHost: {
+      type: String,
+      default: 'https://id.eideasy.com',
+    },
   },
   computed: {
     countryCodeFromStore: getters.countryCode,

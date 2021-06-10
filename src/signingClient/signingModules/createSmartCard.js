@@ -3,32 +3,42 @@ import createResultStore, {actionTypes} from './createResultStore';
 const MODULE_NAME = 'smartCard';
 const createSmartCard = function createSmartCard({
   coreContext,
+  apiClient,
 }) {
   const {i18n, config: coreConfig} = coreContext;
 
-  const step1 = async function step1(settings = {}) {
+  const step1 = function step1(settings = {}) {
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', 'https://id.eideasy.com/signatures/integration/id-card?country=' + settings.countryCode);
+    iframe.setAttribute('src', `${settings.idHost}/signatures/integration/id-card?country=${settings.countryCode}`);
     iframe.style.width = '200px';
     iframe.style.height = '100px';
     settings.iframeHolder.innerHTML = '';
     settings.iframeHolder.appendChild(iframe);
-    iframe.postMessage({
-      operation: 'getSignature',
-      hexDigest: 'hexDigest received from start-signing API call'
-    }, 'https://id.eideasy.com');
-    window.addEventListener('message', async (e) => {
-      console.log(e);
-      if (e.data.operation === "getSignature") {
-        // use e.data.signature_value
-        // Continue to the finalizing the document, adding timestamp and OCSP responses
-        // {{url}}/api/signatures/{{method}}/complete
-      }
-    }, false);
-  };
 
-  const step2 = function step2() {
+    return new Promise((resolve, reject) => {
+      window.addEventListener('message', (e) => {
+        const {operation, error} = e.data;
+        if (error) {
+          reject(e.data);
+        } else if (operation === 'ready') {
+          resolve(iframe);
+        } else {
+          reject(e.data);
+        }
+      }, {once: true});
+    });
+  }
 
+  const step2 = function step2(settings = {}) {
+    return apiClient.post({
+      url: settings.localApiEndpoints.identityFinish,
+      data: {
+        token: settings.data.token,
+        country: settings.countryCode,
+        lang: settings.language,
+      },
+      cancelToken: settings.cancelToken,
+    });
   };
 
   const sign = function sign(settings = {}) {
@@ -45,27 +55,23 @@ const createSmartCard = function createSmartCard({
     const language = settings.language || i18n.getCurrentLanguage();
 
     async function execute() {
-      let step1Result;
+      let iframe;
       const {getState, dispatch} = createResultStore();
       try {
-        step1Result = await step1({
+        iframe = await step1({
           ...config,
-          language,
         });
       } catch (error) {
+        console.error(error);
         dispatch(actionTypes.addResult, {error});
-        if (error.code === 'ECONNABORTED') {
-          dispatch(actionTypes.addMessage, i18n.t('idCardReadTimeout'));
-        }
       }
 
       let step2Result;
-      if (!getState().error && step1Result && step1Result.status === 200) {
+      if (!getState().error && iframe) {
         try {
           step2Result = await step2({
             ...config,
             language,
-            data: step1Result.data,
           });
         } catch (error) {
           dispatch(actionTypes.addResult, {error});
