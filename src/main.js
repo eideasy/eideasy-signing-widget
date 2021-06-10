@@ -9,7 +9,7 @@ Vue.use(vueCustomElement);
 
 Vue.config.productionTip = false
 
-Vue.customElement('eideasy-widget', App, {
+Vue.customElement('eideasy-signing-widget', App, {
   beforeCreateVueInstance: RootComponentDefinition => {
     Vue.use(signingClientPlugin, RootComponentDefinition.propsData);
     Vue.component('v-select', vSelect);
