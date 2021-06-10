@@ -139,12 +139,11 @@ export default {
 
     .vs__search,
     .vs__search:focus {
-      appearance: none;
+      appearance: none !important;
       line-height: 1.4;
       font-size: 1em;
-      border: 1px solid transparent;
-      border-left: none;
-      outline: none;
+      border: 1px solid transparent !important;
+      outline: none !important;
       margin: 4px 0 0;
       padding: 0 7px;
       background: none;
@@ -154,13 +153,15 @@ export default {
       flex-grow: 1;
       z-index: 1;
       position: absolute;
+      height: auto !important;
+      min-height: 0 !important;
     }
 
     .vs__search::-webkit-search-decoration,
     .vs__search::-webkit-search-cancel-button,
     .vs__search::-webkit-search-results-button,
     .vs__search::-webkit-search-results-decoration {
-      -webkit-appearance:none;
+      -webkit-appearance: none !important;
     }
 
     .vs__actions {
