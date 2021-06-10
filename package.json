@@ -1,12 +1,12 @@
 {
   "name": "@eid-easy/eideasy-signing-widget",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "main": "dist/full/eideasy-signing-widget.umd.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build:regular": "vue-cli-service build",
-    "build": "vue-cli-service build --mode production --dest dist/full --target lib --inline-vue --name eideasy-widget src/main.js",
-    "build:external-vue": "vue-cli-service build --mode production --dest dist/widget-only --target lib --name eideasy-widget src/main.js",
+    "build": "vue-cli-service build --mode production --dest dist/full --target lib --inline-vue --name eideasy-signing-widget src/main.js",
+    "build:external-vue": "vue-cli-service build --mode production --dest dist/widget-only --target lib --name eideasy-signing-widget src/main.js",
     "lint": "vue-cli-service lint",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs"
