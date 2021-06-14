@@ -15,7 +15,10 @@ export const getters = {
   currentView: () => store.currentView,
   currentViewTitleKey: () => store.currentViewTitleKey,
   isLoading: () => store.isLoading,
-  flashMessages: () => store.flashMessages,
+  flashMessages: () => {
+    console.log(store.flashMessages);
+    return store.flashMessages;
+  },
 }
 
 export const mutations = {
@@ -84,7 +87,9 @@ export const actions = {
     if (data.message) {
       message.scheme = 'danger';
       message.text = data.message;
+      message.translationKey = '';
     }
+
     mutations.addFlashMessage(message);
   },
   clearFlashMessages() {

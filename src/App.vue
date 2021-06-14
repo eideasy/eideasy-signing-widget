@@ -25,6 +25,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    onEvent: {
+      type: Function,
+      default: () => {},
+    },
     onSuccess: {
       type: Function,
       default: () => {},

@@ -12,10 +12,11 @@ export default {
     messages() {
       const $t = this.$t.bind(this);
       return this.flashMessages.map(function(message) {
-        if (message.translationKey) {
-          message.text = $t(message.translationKey);
+        const newMessage = {...message};
+        if (newMessage.translationKey) {
+          newMessage.text = $t(newMessage.translationKey);
         }
-        return message;
+        return newMessage;
       });
     },
   }

@@ -7,7 +7,7 @@ const createSmartCard = function createSmartCard({
 }) {
   const {i18n, config: coreConfig} = coreContext;
 
-  const step1 = function step1(settings = {}) {
+  const createIframe = function createIframe(settings = {}) {
     const iframe = document.createElement('iframe');
     iframe.setAttribute('src', `${settings.idHost}/signatures/integration/id-card?country=${settings.countryCode}`);
     iframe.style.width = '200px';
@@ -27,18 +27,47 @@ const createSmartCard = function createSmartCard({
         }
       }, {once: true});
     });
-  }
+  };
 
-  const step2 = function step2(settings = {}) {
+  const getCertificate = function getCertificate(settings = {}) {
+    const {iframe} = settings;
+    const promise = new Promise((resolve, reject) => {
+      window.addEventListener('message', (e) => {
+        const {operation, error} = e.data;
+        if (error) {
+          reject(e.data);
+        } else if (operation === 'getCertificate') {
+          resolve(e.data);
+        } else {
+          reject(e.data);
+        }
+      }, {once: true});
+    });
+
+    iframe.contentWindow.postMessage({
+      operation: 'getCertificate',
+    }, settings.idHost);
+
+    return promise;
+  };
+
+  const startSigning = function startSigning(settings = {}) {
+    let url = settings.idHost + '/api/signatures/start-signing';
     return apiClient.post({
-      url: settings.localApiEndpoints.identityFinish,
+      url,
       data: {
-        token: settings.data.token,
-        country: settings.countryCode,
-        lang: settings.language,
+        client_id: '',
+        secret: '',
+        doc_id: '',
+        sign_type: '',
       },
       cancelToken: settings.cancelToken,
     });
+  };
+
+
+  const createSignature = function createSignature(settings = {}) {
+    console.log(settings);
   };
 
   const sign = function sign(settings = {}) {
@@ -58,7 +87,7 @@ const createSmartCard = function createSmartCard({
       let iframe;
       const {getState, dispatch} = createResultStore();
       try {
-        iframe = await step1({
+        iframe = await createIframe({
           ...config,
         });
       } catch (error) {
@@ -66,20 +95,22 @@ const createSmartCard = function createSmartCard({
         dispatch(actionTypes.addResult, {error});
       }
 
-      let step2Result;
+      let getCertificateResult;
       if (!getState().error && iframe) {
         try {
-          step2Result = await step2({
+          getCertificateResult = await getCertificate({
             ...config,
-            language,
+            iframe,
           });
         } catch (error) {
+          console.error(error);
           dispatch(actionTypes.addResult, {error});
+          dispatch(actionTypes.addMessage, i18n.t('readCertificatesFail'));
         }
       }
 
-      if (step2Result) {
-        dispatch(actionTypes.addResult, step2Result);
+      if (getCertificateResult) {
+        console.log(getCertificateResult);
       }
 
       if (getState().error) {
