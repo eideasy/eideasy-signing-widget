@@ -4,7 +4,7 @@ const createApiClient = function createApiClient() {
   const get = function get(settings = {}) {
     return request({
       method: 'get',
-      withCredentials: true,
+      withCredentials: false,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
@@ -18,7 +18,7 @@ const createApiClient = function createApiClient() {
     return request({
       method: 'post',
       cache: 'no-cache',
-      withCredentials: true,
+      withCredentials: false,
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',

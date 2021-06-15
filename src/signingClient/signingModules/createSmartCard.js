@@ -9,34 +9,43 @@ const createSmartCard = function createSmartCard({
 
   const createIframe = function createIframe(settings = {}) {
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `${settings.idHost}/signatures/integration/id-card?country=${settings.countryCode}`);
-    iframe.style.width = '200px';
-    iframe.style.height = '100px';
+    iframe.setAttribute('src', `${settings.idHost}/signatures/integration/id-card`);
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.position = 'absolute';
+    iframe.style.border = '0';
     settings.iframeHolder.innerHTML = '';
-    settings.iframeHolder.appendChild(iframe);
-
-    return new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       window.addEventListener('message', (e) => {
         const {operation, error} = e.data;
         if (error) {
           reject(e.data);
-        } else if (operation === 'ready') {
+        } else if (operation === 'ready' || operation === 'welcome') {
           resolve(iframe);
         } else {
           reject(e.data);
         }
       }, {once: true});
     });
+    settings.iframeHolder.appendChild(iframe);
+    return promise;
   };
 
+  const createMessenger = function createMessenger(settings) {
+    const {iframe, idHost} = settings;
+    return {
+      post(message) {
+        iframe.contentWindow.postMessage(message, idHost);
+      }
+    }
+  }
+
   const getCertificate = function getCertificate(settings = {}) {
-    const {iframe} = settings;
+    const {messenger} = settings;
     const promise = new Promise((resolve, reject) => {
       window.addEventListener('message', (e) => {
-        const {operation, error} = e.data;
-        if (error) {
-          reject(e.data);
-        } else if (operation === 'getCertificate') {
+        const {result, cert} = e.data;
+        if (result === 'ok' && cert) {
           resolve(e.data);
         } else {
           reject(e.data);
@@ -44,30 +53,64 @@ const createSmartCard = function createSmartCard({
       }, {once: true});
     });
 
-    iframe.contentWindow.postMessage({
+    messenger.post({
       operation: 'getCertificate',
-    }, settings.idHost);
+    });
 
     return promise;
   };
 
   const startSigning = function startSigning(settings = {}) {
-    let url = settings.idHost + '/api/signatures/start-signing';
+    console.log(settings);
+    const {countryCode, idHost, cancelToken, certificate, clientId, docId} = settings;
+    let url = idHost + '/api/signatures/start-signing';
     return apiClient.post({
       url,
       data: {
-        client_id: '',
-        secret: '',
-        doc_id: '',
-        sign_type: '',
+        client_id: clientId,
+        doc_id: docId,
+        sign_type: 'id-card',
+        country: countryCode,
+        certificate,
       },
-      cancelToken: settings.cancelToken,
+      cancelToken,
     });
   };
 
+  const getSignature = function createSignature(settings = {}) {
+    const {messenger, hexDigest} = settings;
+    const promise = new Promise((resolve, reject) => {
+      window.addEventListener('message', (e) => {
+        const {result, signature} = e.data;
+        if (result === 'ok' && signature) {
+          resolve(e.data);
+        } else {
+          reject(e.data);
+        }
+      }, {once: true});
+    });
 
-  const createSignature = function createSignature(settings = {}) {
+    messenger.post({
+      operation: 'getSignature',
+      hexDigest,
+    });
+
+    return promise;
+  };
+
+  const completeSigning = function completeSigning(settings = {}) {
     console.log(settings);
+    const {signature, clientId, docId, cancelToken, idHost} = settings;
+    let url = idHost + '/api/signatures/id-card/complete';
+    return apiClient.post({
+      url,
+      data: {
+        client_id: clientId,
+        doc_id: docId,
+        signature_value: signature,
+      },
+      cancelToken,
+    });
   };
 
   const sign = function sign(settings = {}) {
@@ -85,6 +128,7 @@ const createSmartCard = function createSmartCard({
 
     async function execute() {
       let iframe;
+      let messenger;
       const {getState, dispatch} = createResultStore();
       try {
         iframe = await createIframe({
@@ -95,12 +139,19 @@ const createSmartCard = function createSmartCard({
         dispatch(actionTypes.addResult, {error});
       }
 
-      let getCertificateResult;
-      if (!getState().error && iframe) {
+      if (iframe) {
+        messenger = createMessenger({
+          idHost: config.idHost,
+          iframe,
+        });
+      }
+
+      let certificateResult;
+      if (!getState().error && messenger) {
         try {
-          getCertificateResult = await getCertificate({
+          certificateResult = await getCertificate({
             ...config,
-            iframe,
+            messenger,
           });
         } catch (error) {
           console.error(error);
@@ -109,8 +160,45 @@ const createSmartCard = function createSmartCard({
         }
       }
 
-      if (getCertificateResult) {
-        console.log(getCertificateResult);
+      let startSigningResult;
+      if (certificateResult && certificateResult.cert) {
+        try {
+          startSigningResult = await startSigning({
+            ...config,
+            certificate: certificateResult.cert,
+          });
+        } catch (error) {
+          console.error(error);
+          dispatch(actionTypes.addResult, {error});
+        }
+      }
+
+      let getSignatureResult;
+      if (startSigningResult && startSigningResult.data && startSigningResult.data.hexDigest) {
+        try {
+          getSignatureResult = await getSignature({
+            ...config,
+            hexDigest: startSigningResult.data.hexDigest,
+            messenger,
+          });
+        } catch (error) {
+          console.error(error);
+          dispatch(actionTypes.addResult, {error});
+        }
+      }
+
+      let completeSigningResult;
+      if (getSignatureResult && getSignatureResult.signature) {
+        try {
+          completeSigningResult = await completeSigning({
+            ...config,
+            signature: getSignatureResult.signature,
+          });
+          dispatch(actionTypes.addResult, completeSigningResult);
+        } catch (error) {
+          console.error(error);
+          dispatch(actionTypes.addResult, {error});
+        }
       }
 
       if (getState().error) {

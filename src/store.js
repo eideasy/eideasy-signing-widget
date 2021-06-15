@@ -16,7 +16,6 @@ export const getters = {
   currentViewTitleKey: () => store.currentViewTitleKey,
   isLoading: () => store.isLoading,
   flashMessages: () => {
-    console.log(store.flashMessages);
     return store.flashMessages;
   },
 }

@@ -41,6 +41,10 @@ export default {
       type: String,
       default: 'https://id.eideasy.com',
     },
+    docId: {
+      type: String,
+      default: '',
+    },
   },
   computed: {
     countryCodeFromStore: getters.countryCode,
