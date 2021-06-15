@@ -26,6 +26,7 @@ const createSmartCard = function createSmartCard({
           reject(e.data);
         }
       }, {once: true});
+      window.setTimeout(() => reject({message: i18n.t('createIframeTimeout')}), 30*1000);
     });
     settings.iframeHolder.appendChild(iframe);
     return promise;
@@ -137,6 +138,9 @@ const createSmartCard = function createSmartCard({
       } catch (error) {
         console.error(error);
         dispatch(actionTypes.addResult, {error});
+        if (error.message) {
+          dispatch(actionTypes.addMessage, error.message);
+        }
       }
 
       if (iframe) {
