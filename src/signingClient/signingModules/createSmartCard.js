@@ -71,7 +71,6 @@ const createSmartCard = function createSmartCard({
         client_id: clientId,
         doc_id: docId,
         sign_type: 'id-card',
-        country: countryCode,
         certificate,
       },
       cancelToken,
