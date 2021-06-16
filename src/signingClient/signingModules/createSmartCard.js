@@ -10,6 +10,7 @@ const createSmartCard = function createSmartCard({
   const createIframe = function createIframe(settings = {}) {
     const iframe = document.createElement('iframe');
     iframe.setAttribute('src', `${settings.idHost}/signatures/integration/id-card`);
+    iframe.setAttribute('referrerpolicy', 'origin');
     iframe.style.width = '0';
     iframe.style.height = '0';
     iframe.style.position = 'absolute';
