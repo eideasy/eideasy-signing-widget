@@ -63,7 +63,6 @@ const createSmartCard = function createSmartCard({
   };
 
   const startSigning = function startSigning(settings = {}) {
-    console.log(settings);
     const {countryCode, idHost, cancelToken, certificate, clientId, docId} = settings;
     let url = idHost + '/api/signatures/start-signing';
     return apiClient.post({
@@ -101,7 +100,6 @@ const createSmartCard = function createSmartCard({
   };
 
   const completeSigning = function completeSigning(settings = {}) {
-    console.log(settings);
     const {signature, clientId, docId, cancelToken, idHost} = settings;
     let url = idHost + '/api/signatures/id-card/complete';
     return apiClient.post({
