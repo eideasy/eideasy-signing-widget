@@ -30,7 +30,7 @@ export const allMethods = Object.freeze({
 export const enabledMethods = [
   {
     ...allMethods.smartCard,
-    blacklist: ['EE'],
+    whitelist: ['LV', 'LT', 'FI', 'PT'],
   },
   {
     ...allMethods.idCardEE,
@@ -44,4 +44,5 @@ export const enabledMethods = [
    */
 ]
 
-export const availableCountries = Object.keys(countries.getNames("en", {select: "official"}));
+export const availableCountries = Object.keys(countries.getNames("en", {select: "official"}))
+  .filter(countryCode => ['EE', 'LV', 'LT', 'FI', 'PT'].includes(countryCode));

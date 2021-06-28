@@ -27,7 +27,7 @@ export default {
       return this.availableCountries.map((countryCode) => ({
         label: countries.getName(countryCode, this.$i18n.locale, {select: "official"}),
         countryCode,
-      }))
+      })).sort((a, b) => a.label.localeCompare(b.label));
     }
   },
   methods: {
