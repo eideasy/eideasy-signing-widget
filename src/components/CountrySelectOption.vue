@@ -51,6 +51,6 @@ export default {
 .option svg {
   display: block;
   width: 26px;
-  height: auto;
+  height: 22px;
 }
 </style>
