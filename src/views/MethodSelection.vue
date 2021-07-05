@@ -28,10 +28,11 @@ export default {
   },
   methods: {
     ...actions,
-    signWithSmartCard() {
+    signWithSmartCard(apiParam) {
       this.loadingStart();
       this.clearFlashMessages();
       this.$signingClient.signature.smartCard.sign({
+        apiParam,
         iframeHolder: this.$refs.iframeHolder,
         fail: (result) => {
           this.addFlashMessage(result);
@@ -44,11 +45,11 @@ export default {
         },
       });
     },
-    handleMethodSelection(method) {
+    handleMethodSelection(method, apiParam) {
       // we do not need a separate view to handle smart card signing as
       // it doesn't involve any form filling or additional actions in the this widget
       if (method === 'smartCard') {
-        this.signWithSmartCard();
+        this.signWithSmartCard(apiParam);
       } else {
         this.selectMethod(method)
       }
@@ -68,7 +69,7 @@ export default {
         <MethodButton
           :button-name="method.buttonName"
           :disabled="isLoading"
-          :on-click="() => handleMethodSelection(method.method)"
+          :on-click="() => handleMethodSelection(method.method, method.apiParam)"
         />
       </div>
     </div>

@@ -8,28 +8,33 @@ const createSmartCard = function createSmartCard({
   const {i18n, config: coreConfig} = coreContext;
 
   const createIframe = function createIframe(settings = {}) {
+    const {idHost, clientId, iframeHolder, apiParam} = settings;
     const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', `${settings.idHost}/signatures/integration/id-card`);
+    iframe.setAttribute('src', `${idHost}/signatures/integration/${clientId}/${apiParam}`);
     iframe.setAttribute('referrerpolicy', 'origin');
     iframe.style.width = '0';
     iframe.style.height = '0';
     iframe.style.position = 'absolute';
     iframe.style.border = '0';
-    settings.iframeHolder.innerHTML = '';
+    iframeHolder.innerHTML = '';
     const promise = new Promise((resolve, reject) => {
       window.addEventListener('message', (e) => {
-        const {operation, error} = e.data;
+        const {operation, error, status} = e.data;
         if (error) {
           reject(e.data);
         } else if (operation === 'ready' || operation === 'welcome') {
-          resolve(iframe);
+          if (status === 'OK') {
+            resolve(iframe);
+          } else {
+            reject(e.data);
+          }
         } else {
           reject(e.data);
         }
       }, {once: true});
       window.setTimeout(() => reject({message: i18n.t('createIframeTimeout')}), 30*1000);
     });
-    settings.iframeHolder.appendChild(iframe);
+    iframeHolder.appendChild(iframe);
     return promise;
   };
 

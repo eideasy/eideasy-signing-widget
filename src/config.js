@@ -18,19 +18,51 @@ export const allMethods = Object.freeze({
   idCardEE: {
     name: 'idCardEE',
     method: 'smartCard',
+    apiParam: 'id-signature',
     buttonName: methodButtonNames.IdCardButtonEE,
   },
-  smartCard: {
+  idCardLV: {
     name: 'smartCard',
     method: 'smartCard',
+    apiParam: 'lv-id-signature',
     buttonName: methodButtonNames.IdCardButton,
-  }
-})
+  },
+  idCardLT: {
+    name: 'smartCard',
+    method: 'smartCard',
+    apiParam: 'lt-id-signature',
+    buttonName: methodButtonNames.IdCardButton,
+  },
+  idCardFI: {
+    name: 'smartCard',
+    method: 'smartCard',
+    apiParam: 'fi-id-signature',
+    buttonName: methodButtonNames.IdCardButton,
+  },
+  idCardPT: {
+    name: 'smartCard',
+    method: 'smartCard',
+    apiParam: 'pt-id-signature',
+    buttonName: methodButtonNames.IdCardButton,
+  },
+});
 
 export const enabledMethods = [
   {
-    ...allMethods.smartCard,
-    whitelist: ['LV', 'LT', 'FI', 'PT'],
+    ...allMethods.idCardLV,
+    whitelist: ['LV'],
+  },
+  {
+    ...allMethods.idCardLT,
+    whitelist: ['LT'],
+  },
+  {
+    ...allMethods.idCardFI,
+    whitelist: ['FI'],
+  },
+  {
+    ...allMethods.idCardPT,
+    whitelist: ['PT'],
   },
   {
     ...allMethods.idCardEE,
@@ -42,7 +74,7 @@ export const enabledMethods = [
     whitelist: ['EE'],
   }
    */
-]
+];
 
 export const availableCountries = Object.keys(countries.getNames("en", {select: "official"}))
   .filter(countryCode => ['EE', 'LV', 'LT', 'FI', 'PT'].includes(countryCode));
